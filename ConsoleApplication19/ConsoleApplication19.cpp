@@ -24,7 +24,7 @@ public:
     std::string getInfo()
     {
         return "Info about thing under id(" + std::to_string(this->id) + "), weighs " +
-                std::to_string(this->weight) + " kilogram  and costs " + std::to_string(this->price) + " dollar";
+            std::to_string(this->weight) + " kilogram  and costs " + std::to_string(this->price) + " dollar";
     }
 
     int getId() const
@@ -52,15 +52,21 @@ private:
     int maxAmountProduct;
     std::vector<Product*> products;
 
-public: 
-
-    Product* find(std::function<bool(Product*)> hand)
+    Product* find(std::function<bool(Product*)> hand, bool fullInfo)
     {
         if (this->products.size() > 0) {
 
             for (Product* product: products )
             {
-                if (hand(product)) return product;
+                if (hand(product))
+                {
+                    if(fullInfo)
+                    {
+                        std::cout << product->getInfo() << std::endl;
+                    }
+                    else return product;
+                       
+                }
             }
 
             return nullptr;
@@ -74,6 +80,7 @@ public:
             maxAmountProduct{ _maxAmountProduct }
     {}
 
+
     int getAmountProduct()
     { 
         return this->products.size();
@@ -82,7 +89,7 @@ public:
     std::string getProduct(const int id)
     {
 
-        Product* tempProduct{ find([id](const Product* product) {return product->getId() == id; }) };
+        Product* tempProduct{ find([id](const Product* product) {return product->getId() == id; }, 0) };
 
         if(tempProduct != nullptr)
         {
@@ -95,7 +102,7 @@ public:
     void addProduct(int id, float weight, float price)
     {
 
-        Product* tempProduct{ find([id](const Product* product) {return product->getId() == id; }) };
+        Product* tempProduct{ find([id](const Product* product) {return product->getId() == id; }, 0) };
 
         if (this->products.size() == this->maxAmountProduct && tempProduct == nullptr)
         {
@@ -116,7 +123,7 @@ public:
 
     void deleteProduct(int id)
     {
-        Product* tempProduct{ find([id](const Product* product) {return product->getId() == id; }) };
+        Product* tempProduct{ find([id](const Product* product) {return product->getId() == id; }, 0) };
 
         if (tempProduct != nullptr)
         {         
@@ -136,8 +143,10 @@ public:
 int main()
 {
     Storage stor{ 2 };
-    stor.addProduct(12, 200, 201);
-    std::cout << stor.getProduct(12) << std::endl;
-    stor.deleteProduct(12);
+    stor.addProduct(12, 201, 201);
+    stor.addProduct(13, 200, 201);
+    //std::cout << stor.getProduct(12) << std::endl;
+    //stor.deleteProduct(12);
+   // std:cout << stor.products[0] + stor.products[1];
     std::cout << "Hello World!\n";
 }
