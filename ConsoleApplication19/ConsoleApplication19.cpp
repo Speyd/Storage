@@ -1,14 +1,9 @@
 ﻿#include <iostream>
 #include <string>
 #include <vector>
+#include <functional>
 
-class Event
-{
-private:
-
-
-
-};
+//typedef int (*handler)(int);
 
 class Product
 {
@@ -57,13 +52,15 @@ private:
     int maxAmountProduct;
     std::vector<Product*> products;
 
-    Product* findId(const int id)
+public: 
+
+    Product* find(std::function<bool(Product*)> hand)
     {
         if (this->products.size() > 0) {
 
             for (Product* product: products )
             {
-                if (product->getId() == id) return product;
+                if (hand(product)) return product;
             }
 
             return nullptr;
@@ -84,9 +81,12 @@ public:
 
     std::string getProduct(const int id)
     {
-        if(products.size() != 0 && findId(id) != UnFind)
+
+        Product* tempProduct{ find([id](const Product* product) {return product->getId() == id; }) };
+
+        if(tempProduct != nullptr)
         {
-            return products[findId(id)]->getInfo();
+            return tempProduct->getInfo();
         }
         
         return "Error!";
@@ -95,27 +95,34 @@ public:
     void addProduct(int id, float weight, float price)
     {
 
-        Product* tempProduct{ findId(id) };
+        Product* tempProduct{ find([id](const Product* product) {return product->getId() == id; }) };
 
-        if (this->products.size() == this->maxAmountProduct)
+        if (this->products.size() == this->maxAmountProduct && tempProduct == nullptr)
         {
             std::cout << "Storage full!" << std::endl;
+            return;
         }
-        else if (tempProduct != nullptr)
+        
+        if (tempProduct != nullptr)
         {
             tempProduct->sumWeight(weight);
         }
         else
         {
             this->products.push_back(new Product{ id, weight, price });
-            std::cout << "Product with id(" << id << ") successfully added!" << std::endl;
         }
+        std::cout << "Product with id(" << id << ") successfully added!" << std::endl;
     }
 
     void deleteProduct(int id)
     {
-        if (this->products.size() > 0 && findId(id) != UnFind)
+        Product* tempProduct{ find([id](const Product* product) {return product->getId() == id; }) };
+
+        if (tempProduct != nullptr)
         {         
+            this->products.erase(std::remove(this->products.begin(), this->products.end(), tempProduct),
+                                 this->products.end());
+
             std::cout << "Product with id(" << id << ") successfully delete!" << std::endl;
         }
         else
@@ -131,6 +138,6 @@ int main()
     Storage stor{ 2 };
     stor.addProduct(12, 200, 201);
     std::cout << stor.getProduct(12) << std::endl;
-    stor.addProduct(12, 200, 200);
+    stor.deleteProduct(12);
     std::cout << "Hello World!\n";
 }
