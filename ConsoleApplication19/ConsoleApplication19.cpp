@@ -2,6 +2,14 @@
 #include <string>
 #include <vector>
 
+class Event
+{
+private:
+
+
+
+};
+
 class Product
 {
 private:
@@ -24,10 +32,22 @@ public:
                 std::to_string(this->weight) + " kilogram  and costs " + std::to_string(this->price) + " dollar";
     }
 
-    int getId()
+    int getId() const
     {
         return this->id;
     }
+
+    float getWeight() const
+    {
+        return this->weight;
+    }
+
+    void sumWeight(const float _weight)
+    {
+        this->weight += _weight;
+    }
+
+
 };
 
 class Storage
@@ -36,6 +56,20 @@ private:
 
     int maxAmountProduct;
     std::vector<Product*> products;
+
+    Product* findId(const int id)
+    {
+        if (this->products.size() > 0) {
+
+            for (Product* product: products )
+            {
+                if (product->getId() == id) return product;
+            }
+
+            return nullptr;
+        }
+        else return nullptr;
+    }
 
 public:
 
@@ -48,37 +82,28 @@ public:
         return this->products.size();
     }
 
-    int findId(const int id)
-    {
-        if (this->products.size() > 0) {
-
-            for (size_t i{}; i < this->products.size(); i++)
-            {
-                if (this->products[i]->getId() == id) return i;
-            }
-
-            return -1;
-        }
-        else return -1;
-    }
-
     std::string getProduct(const int id)
     {
-        if(products.size() != 0 && findId(id) != -1)
+        if(products.size() != 0 && findId(id) != UnFind)
         {
             return products[findId(id)]->getInfo();
         }
+        
+        return "Error!";
     }
 
     void addProduct(int id, float weight, float price)
     {
+
+        Product* tempProduct{ findId(id) };
+
         if (this->products.size() == this->maxAmountProduct)
         {
             std::cout << "Storage full!" << std::endl;
         }
-        else if (findId(id) != -1)
+        else if (tempProduct != nullptr)
         {
-            std::cout << "Product has already been added!" << std::endl;  
+            tempProduct->sumWeight(weight);
         }
         else
         {
@@ -89,7 +114,7 @@ public:
 
     void deleteProduct(int id)
     {
-        if (this->products.size() > 0 && findId(id) != -1)
+        if (this->products.size() > 0 && findId(id) != UnFind)
         {         
             std::cout << "Product with id(" << id << ") successfully delete!" << std::endl;
         }
