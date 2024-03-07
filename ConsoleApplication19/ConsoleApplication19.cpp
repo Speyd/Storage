@@ -52,7 +52,7 @@ private:
     int maxAmountProduct;
     std::vector<Product*> products;
 
-    Product* find(std::function<bool(Product*)> hand, bool fullInfo)
+    Product* find(std::function<bool(Product*)> hand)
     {
         if (this->products.size() > 0) {
 
@@ -60,18 +60,35 @@ private:
             {
                 if (hand(product))
                 {
-                    if(fullInfo)
-                    {
-                        std::cout << product->getInfo() << std::endl;
-                    }
-                    else return product;
-                       
+                    return product;           
                 }
             }
 
             return nullptr;
         }
         else return nullptr;
+    }
+
+
+public:
+
+    std::vector<Product*> allFind(std::function<bool(Product*)> hand)
+    {
+
+        std::vector<Product*> tempProducts;
+
+        if (this->products.size() > 0) {
+
+            for (Product* product : products)
+            {
+                if (hand(product))
+                {
+                    tempProducts.push_back(product);
+                }
+            }
+        }
+
+        return tempProducts;
     }
 
 public:
@@ -89,7 +106,7 @@ public:
     std::string getProduct(const int id)
     {
 
-        Product* tempProduct{ find([id](const Product* product) {return product->getId() == id; }, 0) };
+        Product* tempProduct{ find([id](const Product* product) {return product->getId() == id; }) };
 
         if(tempProduct != nullptr)
         {
@@ -102,7 +119,7 @@ public:
     void addProduct(int id, float weight, float price)
     {
 
-        Product* tempProduct{ find([id](const Product* product) {return product->getId() == id; }, 0) };
+        Product* tempProduct{ find([id](const Product* product) {return product->getId() == id; }) };
 
         if (this->products.size() == this->maxAmountProduct && tempProduct == nullptr)
         {
@@ -123,7 +140,7 @@ public:
 
     void deleteProduct(int id)
     {
-        Product* tempProduct{ find([id](const Product* product) {return product->getId() == id; }, 0) };
+        Product* tempProduct{ find([id](const Product* product) {return product->getId() == id; }) };
 
         if (tempProduct != nullptr)
         {         
@@ -148,5 +165,9 @@ int main()
     //std::cout << stor.getProduct(12) << std::endl;
     //stor.deleteProduct(12);
    // std:cout << stor.products[0] + stor.products[1];
+    for(Product* product : stor.allFind([](const Product* product) {return product->getWeight() == 2021; }))
+    {
+        std::cout << product->getInfo() << std::endl;
+    }
     std::cout << "Hello World!\n";
 }
