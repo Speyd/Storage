@@ -5,6 +5,92 @@
 
 //typedef int (*handler)(int);
 
+enum elementProduct
+{
+    Null,
+    Id,
+    Weight,
+    Price
+};
+
+
+//class Menu
+//{
+//private:
+//
+//    short choice;
+//    elementProduct element;
+//    std::vector<std::string> eventText
+//    { 
+//        "Add new(to existing) product", "Delete product",
+//        "Find product"
+//    };
+//    std::vector<std::string> criteriaText
+//    {
+//        "Id", "Weight", "Price"
+//    };
+//
+//public:
+//
+//    Menu(const short _choice = 0, const elementProduct _element = Null):
+//         choice{ _choice },
+//         element{ _element }
+//    {}
+//
+//    elementProduct getElemProd() const
+//    {
+//        return element;
+//    }
+//
+//    short getChoice() const
+//    {
+//        return choice;
+//    }
+//
+//    std::string getElement(const int index) const
+//    {
+//        return eventText[index];
+//    }
+//
+//    void setChoice()
+//    {
+//        do {
+//
+//            for (short i{ 0 }; i < eventText.size(); i++)
+//            {
+//                std::cout << i + 1 << ". " << eventText[i] << std::endl;
+//            }
+//            std::cout << "Your choice: ";
+//            std::cin >> choice;
+//
+//        } while (choice < 1 || choice > eventText.size());
+//    }
+//
+//    void setElement()
+//    {
+//        for (short i{ 0 }; i < criteriaText.size(); i++)
+//        {
+//            std::cout << i + 1 << ". " << criteriaText[i] << std::endl;
+//        }
+//
+//        int num{};
+//        std::cout << "What criteria do you want to search by?: ";
+//        std::cin >> num;
+//
+//        element = elementProduct(num);
+//    }
+//
+//    void makeChoice()
+//    {
+//        setChoice();
+//        if(eventText[choice].find("Find"))
+//        {
+//        
+//        }
+//    }
+//
+//};
+
 class Product
 {
 private:
@@ -35,6 +121,11 @@ public:
     float getWeight() const
     {
         return this->weight;
+    }
+
+    float getPrice() const
+    {
+        return price;
     }
 
     void sumWeight(const float _weight)
@@ -69,7 +160,6 @@ private:
         else return nullptr;
     }
 
-
 public:
 
     std::vector<Product*> allFind(std::function<bool(Product*)> hand)
@@ -91,7 +181,6 @@ public:
         return tempProducts;
     }
 
-public:
 
     Storage(int _maxAmountProduct):
             maxAmountProduct{ _maxAmountProduct }
@@ -157,17 +246,143 @@ public:
 
 };
 
+class Event
+{
+public:
+
+    void eventFind(const elementProduct& element, Storage& stor)
+    {
+
+        float criteria;                     //TODO: разобраться с этим МЕГА костылем
+        std::cout << "Enter " <<(
+            element == Id ? "Id" :
+            element == Weight ? "weight" :
+            element == Price ? "price" : "Error") 
+            << " for find: ";
+
+        std::cin >> criteria;
+
+        std::vector<Product*> temp = stor.allFind
+        (
+            [criteria, element](Product* product)
+            {
+                return element == Id && product->getId() == criteria ||
+                    element == Weight && product->getWeight() == criteria ||
+                    element == Price && product->getPrice() == criteria;
+            }
+        );
+
+        if(temp.size() == 0)
+        {
+            std::cout << "No product matching your criteria was found!" << std::endl;
+            return;
+        }
+
+        for(Product* product: temp)
+        {
+            std::cout << product->getInfo() << std::endl;
+        }
+    }
+
+};
+
+class Menu
+{
+private:
+
+    short choice;
+    elementProduct element;
+    std::vector<std::string> eventText
+    {
+        "Add new(to existing) product", "Delete product",
+        "Find product"
+    };
+    std::vector<std::string> criteriaText
+    {
+        "Id", "Weight", "Price"
+    };
+
+public:
+
+    Event events;
+
+    Menu(const short _choice = 0, const elementProduct _element = Null) :
+        choice{ _choice },
+        element{ _element }
+    {}
+
+    elementProduct getElemProd() const
+    {
+        return element;
+    }
+
+    short getChoice() const
+    {
+        return choice;
+    }
+
+    std::string getElement(const int index) const
+    {
+        return eventText[index];
+    }
+
+    void setChoice()
+    {
+        do {
+
+            for (int i{ 0 }; i < eventText.size(); i++)
+            {
+                std::cout << i + 1 << ". " << eventText[i] << std::endl;
+            }
+            std::cout << "Your choice: ";
+            std::cin >> choice;
+
+        } while (choice < 1 || choice > eventText.size());
+
+        choice--;
+    }
+
+    void setElemProd()
+    {
+        for (short i{ 0 }; i < criteriaText.size(); i++)
+        {
+            std::cout << i + 1 << ". " << criteriaText[i] << std::endl;
+        }
+
+        int num{};
+        std::cout << "What criteria do you want to search by?: ";
+        std::cin >> num;
+
+        element = elementProduct(num);
+    }
+
+    void makeChoice()
+    {
+        setChoice();
+        if (eventText[choice].find("Find") != std::string::npos)
+        {
+            setElemProd();
+        }
+    }
+
+};
+
 int main()
 {
+    Menu menu;
     Storage stor{ 2 };
     stor.addProduct(12, 201, 201);
     stor.addProduct(13, 200, 201);
+    menu.makeChoice();
+    if(menu.getElement(menu.getChoice()).find("Find") != std::string::npos)
+    {
+        menu.events.eventFind(menu.getElemProd(), stor);
+    }
     //std::cout << stor.getProduct(12) << std::endl;
     //stor.deleteProduct(12);
    // std:cout << stor.products[0] + stor.products[1];
-    for(Product* product : stor.allFind([](const Product* product) {return product->getWeight() == 2021; }))
+   /* for(Product* product : stor.allFind([](const Product* product) {return product->getWeight() == 2021; }))
     {
         std::cout << product->getInfo() << std::endl;
-    }
-    std::cout << "Hello World!\n";
+    }*/
 }
