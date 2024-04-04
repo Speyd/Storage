@@ -1,0 +1,47 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\C\u002B\u002B \u043F\u0440\u043E\u0435\u043A\u0442\u044B\\Storage\\ConsoleApplication19\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{8A36A022-017E-4A18-8A32-54ADD9C51DBB}|ConsoleApplication19\\ConsoleApplication19.vcxproj|D:\\C\u002B\u002B \u043F\u0440\u043E\u0435\u043A\u0442\u044B\\Storage\\ConsoleApplication19\\ConsoleApplication19\\ConsoleApplication19.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{8A36A022-017E-4A18-8A32-54ADD9C51DBB}|ConsoleApplication19\\ConsoleApplication19.vcxproj|solutionrelative:ConsoleApplication19\\ConsoleApplication19.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ConsoleApplication19.cpp",
+              "DocumentMoniker": "D:\\C\u002B\u002B \u043F\u0440\u043E\u0435\u043A\u0442\u044B\\Storage\\ConsoleApplication19\\ConsoleApplication19\\ConsoleApplication19.cpp",
+              "RelativeDocumentMoniker": "ConsoleApplication19\\ConsoleApplication19.cpp",
+              "ToolTip": "D:\\C\u002B\u002B \u043F\u0440\u043E\u0435\u043A\u0442\u044B\\Storage\\ConsoleApplication19\\ConsoleApplication19\\ConsoleApplication19.cpp",
+              "RelativeToolTip": "ConsoleApplication19\\ConsoleApplication19.cpp",
+              "ViewState": "AQIAADoBAAAAAAAAAAAkwEoBAAARAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-03-06T19:09:18.04Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
