@@ -5,8 +5,6 @@
 #include <functional>
 
 
-<<<<<<< HEAD
-=======
 enum enumElementProduct
 {
     Null,
@@ -23,16 +21,16 @@ private:
 
 public:
 
-    elementProduct(const std::map<std::string, enumElementProduct>& _searchParameters):
-                   choice{ 1 },
-                   searchParameters{ _searchParameters }
+    elementProduct(const std::map<std::string, enumElementProduct>& _searchParameters) :
+        choice{ 1 },
+        searchParameters{ _searchParameters }
     {}
 
     void inputSearchParametrs() const
     {
         int count{ 1 };
 
-        for(auto parameter: searchParameters)
+        for (auto parameter : searchParameters)
         {
             std::cout << count++ << ". " << parameter.first << std::endl;
         }
@@ -45,7 +43,7 @@ public:
 
     enumElementProduct setParametrs()
     {
-    
+
         if (this->searchParameters.size() == 0) return Null;
         auto it = searchParameters.begin();
 
@@ -62,7 +60,6 @@ public:
 };
 
 
->>>>>>> 44c59be (Change all code)
 class Product
 {
 private:
@@ -73,10 +70,10 @@ private:
 
 public:
 
-    Product(int _id, float _weight, float _price):
-            id{ _id },
-            weight{ _weight },
-            price{ _price }
+    Product(int _id, float _weight, float _price) :
+        id{ _id },
+        weight{ _weight },
+        price{ _price }
     {}
 
     std::string getInfo()
@@ -95,6 +92,11 @@ public:
         return this->weight;
     }
 
+    float getPrice() const
+    {
+        return price;
+    }
+
     void sumWeight(const float _weight)
     {
         this->weight += _weight;
@@ -109,20 +111,15 @@ private:
     int maxAmountProduct;
     std::vector<Product*> products;
 
-    Product* find(std::function<bool(Product*)> hand, bool fullInfo)
+    Product* find(std::function<bool(Product*)> hand)
     {
         if (this->products.size() > 0) {
 
-            for (Product* product: products )
+            for (Product* product : products)
             {
                 if (hand(product))
                 {
-                    if(fullInfo)
-                    {
-                        std::cout << product->getInfo() << std::endl;
-                    }
-                    else return product;
-                       
+                    return product;
                 }
             }
 
@@ -133,40 +130,60 @@ private:
 
 public:
 
-    Storage(int _maxAmountProduct):
-            maxAmountProduct{ _maxAmountProduct }
+    std::vector<Product*> allFind(std::function<bool(Product*)> hand)
+    {
+
+        std::vector<Product*> tempProducts;
+
+        if (this->products.size() > 0) {
+
+            for (Product* product : products)
+            {
+                if (hand(product))
+                {
+                    tempProducts.push_back(product);
+                }
+            }
+        }
+
+        return tempProducts;
+    }
+
+
+    Storage(int _maxAmountProduct) :
+        maxAmountProduct{ _maxAmountProduct }
     {}
 
 
     int getAmountProduct()
-    { 
+    {
         return this->products.size();
     }
 
     std::string getProduct(const int id)
     {
 
-        Product* tempProduct{ find([id](const Product* product) {return product->getId() == id; }, 0) };
+        Product* tempProduct{ find([id](const Product* product) {return product->getId() == id; }) };
 
-        if(tempProduct != nullptr)
+        if (tempProduct != nullptr)
         {
             return tempProduct->getInfo();
         }
-        
+
         return "Error!";
     }
 
     void addProduct(int id, float weight, float price)
     {
 
-        Product* tempProduct{ find([id](const Product* product) {return product->getId() == id; }, 0) };
+        Product* tempProduct{ find([id](const Product* product) {return product->getId() == id; }) };
 
         if (this->products.size() == this->maxAmountProduct && tempProduct == nullptr)
         {
             std::cout << "Storage full!" << std::endl;
             return;
         }
-        
+
         if (tempProduct != nullptr)
         {
             tempProduct->sumWeight(weight);
@@ -180,12 +197,12 @@ public:
 
     void deleteProduct(int id)
     {
-        Product* tempProduct{ find([id](const Product* product) {return product->getId() == id; }, 0) };
+        Product* tempProduct{ find([id](const Product* product) {return product->getId() == id; }) };
 
         if (tempProduct != nullptr)
-        {         
+        {
             this->products.erase(std::remove(this->products.begin(), this->products.end(), tempProduct),
-                                 this->products.end());
+                this->products.end());
 
             std::cout << "Product with id(" << id << ") successfully delete!" << std::endl;
         }
@@ -197,17 +214,6 @@ public:
 
 };
 
-<<<<<<< HEAD
-int main()
-{
-    Storage stor{ 2 };
-    stor.addProduct(12, 201, 201);
-    stor.addProduct(13, 200, 201);
-    //std::cout << stor.getProduct(12) << std::endl;
-    //stor.deleteProduct(12);
-   // std:cout << stor.products[0] + stor.products[1];
-    std::cout << "Hello World!\n";
-=======
 
 
 void eventFind(elementProduct& product, Storage& stor)
@@ -346,5 +352,4 @@ int main()
     menu[menu.setChoicePlayer()](element, stor);
 
     return 0;
->>>>>>> 44c59be (Change all code)
 }
